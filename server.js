@@ -11,6 +11,7 @@ const port = process.env.PORT || 5000;
 // initializing handlebars
 const exphbs = require('express-handlebars');
 
+const Post = require('./models/post')
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
@@ -32,9 +33,16 @@ app.get('/posts/new', (req, res) => {
     res.render('posts-new');
 })
 
-app.get('/posts/create', (req, res) => {
-
+app.get('/posts', (req, res) => {
+    res.render('posts-show')
 })
 
+app.post('/posts', (req, res) => {
+    Post.create(req.body).then(() => {
+        res.redirect('/')
+    }).catch((err) => {
+        console.log(err.message);
+      })
+});
 // host
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
