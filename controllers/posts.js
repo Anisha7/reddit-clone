@@ -5,12 +5,16 @@ module.exports = (app) => {
     // CREATE
     app.post('/posts', (req, res) => {
         // INSTANTIATE INSTANCE OF POST MODEL
+        console.log(req.body);
         const post = new Post(req.body);
 
         // SAVE INSTANCE OF POST MODEL TO DB
-        post.save((err, post) => {
-            // REDIRECT TO THE ROOT
-            return res.redirect(`/`);
+        post.save()
+        .then((post) =>{
+            console.log(post);
+            res.redirect(`/`);
+        }).catch((err)=>{
+            console.log(err.message);
         })
     });
 
@@ -29,14 +33,6 @@ module.exports = (app) => {
         res.render('posts-new');
     })
 
-    app.get('/posts', (req, res) => {
-        Post.find().then(posts => {
-            console.log(posts)
-            res.render('posts-show', {posts: posts})
-        })
-        
-    })
-
     app.get("/posts/:id", function(req, res) {
         // LOOK UP THE POST
         Post.findById(req.params.id)
@@ -47,5 +43,16 @@ module.exports = (app) => {
             console.log(err.message);
           });
       });
+
+    // SUBREDDIT
+    app.get("/n/:subreddit", function(req, res) {
+        Post.find({ subreddit: req.params.subreddit })
+        .then(posts => {
+            res.render("posts-index.hbs", { posts });
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    });
 
 };
