@@ -34,11 +34,16 @@ app.get('/posts/new', (req, res) => {
 })
 
 app.get('/posts', (req, res) => {
-    res.render('posts-show')
+    Post.find().then(posts => {
+        console.log(posts)
+        res.render('posts-show', {posts: posts})
+    })
+    
 })
 
 app.post('/posts', (req, res) => {
-    Post.create(req.body).then(() => {
+    console.log(req.body)
+    Post.create(req.body).then(post => {
         res.redirect('/')
     }).catch((err) => {
         console.log(err.message);

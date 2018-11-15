@@ -3,17 +3,18 @@
 <a href="/">Back to Home</a>
 <div class="row">
   <div class="col-sm-6 col-sm-offset-3">
-    <h1>{{post.title}}</h1>
-    <h2>{{post.subtitle}}</h2>
-    <p>{{post.description}}</p>
+    {{#each posts}}
+    <h1>{{this.title}}</h1>
+    <h2>{{this.subtitle}}</h2>
+    <p>{{this.description}}</p>
 
-    <p><a href="/posts/{{post._id}}/edit">Edit</a></p>
+    <p><a href="/posts/{{this._id}}/edit">Edit</a></p>
     <p>
-        <form method="POST" action="/posts/{{post._id}}?_method=DELETE">
+        <form method="POST" action="/posts/{{this._id}}?_method=DELETE">
             <button class="btn btn-primary" type="submit">Delete</button>
         </form>
     </p>
-
+    {{/each}}
     <hr>
 
 </div>
