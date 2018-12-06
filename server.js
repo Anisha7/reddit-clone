@@ -21,6 +21,7 @@ const Post = require('./models/post')
 
 // controllers
 const posts = require('./controllers/posts')
+const comments = require('./controllers/comments-controller.js');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
@@ -35,6 +36,7 @@ app.set('view engine', 'handlebars');
 app.use(methodOverride('_method'))
 
 posts(app)
+comments(app)
 
 // host
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
