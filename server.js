@@ -2,14 +2,18 @@
 const express = require('express');
 // const mongoose = require('mongoose');
 // mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/reddit-clone');
+const bcrypt = require("bcryptjs");
 
 // Set db
 require('./data/reddit-db');
 
 require('dotenv').config();
 
+var cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+
 //import express from 'express'
-const methodOverride = require('method-override')
+const methodOverride = require('method-override');
 // INITIALIZE BODY-PARSER AND ADD IT TO APP
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
@@ -26,6 +30,7 @@ const posts = require('./controllers/posts')
 const comments = require('./controllers/comments-controller.js');
 const auth = require('./controllers/auth.js');
 
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 // after body parser initialization!
