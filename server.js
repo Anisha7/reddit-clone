@@ -6,6 +6,8 @@ const express = require('express');
 // Set db
 require('./data/reddit-db');
 
+require('dotenv').config();
+
 //import express from 'express'
 const methodOverride = require('method-override')
 // INITIALIZE BODY-PARSER AND ADD IT TO APP
@@ -22,6 +24,7 @@ const Post = require('./models/post')
 // controllers
 const posts = require('./controllers/posts')
 const comments = require('./controllers/comments-controller.js');
+const auth = require('./controllers/auth.js');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
@@ -37,6 +40,7 @@ app.use(methodOverride('_method'))
 
 posts(app)
 comments(app)
+auth(app)
 
 // host
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
