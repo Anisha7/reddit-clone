@@ -1,18 +1,28 @@
 const Post = require('../models/post');
+const User = require('../models/user')
 
 module.exports = (app) => {
 
     // CREATE
     app.post("/posts", (req, res) => {
-        if (req.user) {
+
         var post = new Post(req.body);
-    
-        post.save(function(err, post) {
-            return res.redirect(`/`);
+        post.author = req.user._id;
+
+        post
+        .save()
+        .then(post => {
+            return User.findById(req.user._id);
+        })
+        .then(user => {
+            user.posts.unshift(post);
+            user.save();
+            // REDIRECT TO THE NEW POST
+            res.redirect("/posts/" + post._id);
+        })
+        .catch(err => {
+            console.log(err.message);
         });
-        } else {
-        return res.status(401); // UNAUTHORIZED
-        }
     });
 
     app.get("/", (req, res) => {
@@ -20,8 +30,10 @@ module.exports = (app) => {
       
         Post.find({})
           .then(posts => {
-            res.render("posts-index.handlebars", { posts, currentUser });
-          })
+
+            res.render("posts-index.handlebars", { posts, currentUser});
+            
+        })
           .catch(err => {
             console.log(err.message);
           });
@@ -35,7 +47,12 @@ module.exports = (app) => {
 
         // LOOK UP THE POST
         Post.findById(req.params.id).populate('comments').then((post) => {
-            res.render('post-show.handlebars', { post })
+            User.findById(post.author).then((user) => {
+                for (comment in post.comments) {
+                    post.populate('comment')
+                }
+                res.render('post-show.handlebars', { post, user })
+            })
         }).catch((err) => {
             console.log(err.message)
         })
