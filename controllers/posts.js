@@ -49,6 +49,7 @@ module.exports = (app) => {
         Post.findById(req.params.id).populate('comments').then((post) => {
             User.findById(post.author).then((user) => {
                 for (comment in post.comments) {
+                    // NEED TO FIX, author names don't show up on comments
                     post.populate('comment')
                 }
                 res.render('post-show.handlebars', { post, user })

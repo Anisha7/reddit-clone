@@ -5,6 +5,15 @@ const Post = require("../models/post");
 
 
 describe("Posts", () => {
+  before(done => {
+    agent
+      .post("/login")
+      .send({ username: "testone", password: "password" })
+      .end(function(err, res) {
+        done();
+      });
+  });
+  
   it("should create with valid attributes at POST /posts", done => {
     // Import your Post model
     var post = { title: "post title", url: "https://www.google.com", summary: "post summary" };
