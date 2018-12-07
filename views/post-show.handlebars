@@ -11,10 +11,11 @@
         </div>
     </form>
 
-    {{#each post.comments}}
-      <p>author: {{this.author.username}} </p>
-      <p>{{this.content}}</p>
-    {{/each}}
+    <div class="row">
+      {{#each post.comments}}
+        {{> partials/comment}}
+      {{/each}}
+    </div>
 
   </div>
 </div>
